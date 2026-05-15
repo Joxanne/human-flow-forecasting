@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.venv/
+
+# Data files (too large to commit)
+*.csv
+*.h5
+*.weights.h5
+poi_data/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Personal documents
+暑假作業_劉介恩.pdf
