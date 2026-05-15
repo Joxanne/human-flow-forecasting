@@ -21,20 +21,30 @@
 ## 探索性分析
 
 ### 空間熱圖（Human Flow Heatmap）
-- 單一時間點切片視覺化（LogNorm 色階）
-- 全時段加總熱圖，識別高人流節點
+
+單一時間點切片（Day 61, Time 20）：
+
+![單一時間切片熱圖](images/01_heatmap_slice.png)
+
+全時段加總熱圖，識別高人流節點：
+
+![全時段加總熱圖](images/02_heatmap_total.png)
 
 ### 時序模式分析
-- 全域時間索引折線圖（75 天連續）
-- 週次分解：每週 7 天 × 48 時間槽的週期性模式
+
+全域時間序列（75 天連續）：
+
+![時序折線圖](images/03_timeseries.png)
+
+週次分解模式（每週 7 天 × 48 時間槽）：
+
+![週次模式](images/04_weekly_pattern.png)
 
 ### 個人化特徵
-- **住家推定**：依 22:00–06:00 最常出現位置推斷居住地
-- **在家率熱圖**：星期 × 週次的 At-home 矩陣（Min-Max 正規化）
 
-### POI 分析
-- 各城市 Transit Station、Shopping、School 密度最高格點識別
-- 跨城市同類 POI 週流量比較（`weekly_flow_analysis.py`）
+依 22:00–06:00 最常出現位置推斷居住地，並統計各週次 × 星期的在家率：
+
+![在家率熱圖](images/05_athome_heatmap.png)
 
 ---
 
@@ -56,6 +66,14 @@
 | Loss | MSE |
 | Train / Val / Test | 70% / 10% / 20% |
 
+![LSTM 預測結果](images/06_lstm_prediction.png)
+
+![LSTM 誤差直方圖](images/07_lstm_error_hist.png)
+
+![LSTM Loss 曲線](images/08_lstm_loss.png)
+
+---
+
 ### 2. cGAN（空間 Patch 生成）
 
 ```
@@ -69,6 +87,14 @@
 | Discriminator | Conv2D × 3（LeakyReLU）+ Dense(1) |
 | 損失函數 | BCE（對抗）+ L1（重建，λ=100） |
 | Optimizer | Adam（lr=2e-4, β₁=0.5） |
+
+![cGAN 訓練最終結果（Real vs Fake Patch）](images/09_cgan_final_epoch.png)
+
+![cGAN Real vs Fake 折線](images/10_cgan_real_vs_fake.png)
+
+![cGAN Batch Loss 曲線](images/11_cgan_batch_loss.png)
+
+---
 
 ### 3. Diffusion Model（條件空間生成）
 
@@ -84,6 +110,16 @@
 | 架構 | U-Net（Encoder-Bottleneck-Decoder，含條件注入） |
 | Optimizer | Adam（lr=1e-4） |
 | 訓練 / 驗證 / 測試 | 80% / 10% / 10% |
+
+去噪生成過程（Real → Step 1 → ... → Final）：
+
+![Diffusion 去噪過程](images/13_diffusion_denoising.png)
+
+測試集 Real vs Generated 對比：
+
+![Diffusion 測試集對比](images/15_diffusion_test.png)
+
+![Diffusion Loss 曲線](images/14_diffusion_loss.png)
 
 ---
 
@@ -115,6 +151,7 @@ human-flow-forecasting/
 ├── pre_processing.py        # 資料前處理，擷取 9×9 Patch
 ├── poi_finding.py           # POI 類別分析工具
 ├── weekly_flow_analysis.py  # 跨城市週流量比較視覺化
+├── images/                  # README 圖片
 └── poi_data/                # POI CSV 資料（需自行準備，已 .gitignore）
 ```
 
